@@ -4,7 +4,7 @@ services:
     build: ./redisedge
     ports:
       - 6379:6379
-  droneapp57:
+  droneapp59:
     build: ./app
     depends_on:
       - redisedge

@@ -26,7 +26,6 @@ def add_boxes_to_images(img, predictions,classes):
             shape = [(x, y), (width, height)]
 
             redisgears.executeCommand('xadd', 'result8', '*', 'text', "1")
-            # font = ImageFont.load_path("/arial.ttf")
 
             font = ImageFont.truetype(r'/var/opt/redislabs/modules/rg/python3_1.0.6/ariblk.ttf', 20)
             redisgears.executeCommand('xadd', 'result9', '*', 'text', "2")
@@ -38,7 +37,7 @@ def add_boxes_to_images(img, predictions,classes):
         saveResizeImageToAzure(img)    
     except:
         xlog('add_boxes_to_images: error:', sys.exc_info()[0])
-# 
+
 def saveImageToAzure(img):
     try:
         img_byte_arr = io.BytesIO()
@@ -98,9 +97,6 @@ def predict_image(image):
 
             detectedboxes = np.delete(arr_2d, deleteLowProbResult, axis=0)
             detectedclasses = np.delete(res3, deleteLowProbResult)
-
-            redisgears.executeCommand('xadd', 'result6', '*', 'text', detectedboxes)
-            redisgears.executeCommand('xadd', 'result7', '*', 'text', detectedclasses)
 
             add_boxes_to_images(image,detectedboxes,detectedclasses)
 
