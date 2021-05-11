@@ -24,13 +24,9 @@ def add_boxes_to_images(img, predictions,classes):
             width = int(pred[2] * 600)
             height = int(pred[3] * 600)
             shape = [(x, y), (width, height)]
-
-            redisgears.executeCommand('xadd', 'result8', '*', 'text', "1")
-
+            
             font = ImageFont.truetype(r'/var/opt/redislabs/modules/rg/python3_1.0.6/ariblk.ttf', 20)
-            redisgears.executeCommand('xadd', 'result9', '*', 'text', "2")
             text = Labels[classes[idx]]
-            redisgears.executeCommand('xadd', 'result10', '*', 'text', "3")
 
             ImageDraw.Draw(img).rectangle(shape, outline ="red") 
             ImageDraw.Draw(img).text((x, y), text, fill ="red", align ="left",font=font)
@@ -54,11 +50,11 @@ def saveResizeImageToAzure(img):
         img_byte_arr = img_byte_arr.getvalue()
         blob1.upload_blob(img_byte_arr)
     except:
-        xlog('saveImageToAzure: error:', sys.exc_info()[0])
+        xlog('saveResizeImageToAzure: error:', sys.exc_info()[0])
 
-def predict_image(image):
+def predictImage(x):
         try:
-            image_data = io.BytesIO(image)
+            image_data = io.BytesIO(x['value']['image'])
             image = Image.open(image_data)
             saveImageToAzure(image)
             numpy_img = np.array(image)
@@ -79,13 +75,7 @@ def predict_image(image):
             res1 = redisAI.tensorToFlatList(res[0])
             res2 = redisAI.tensorToFlatList(res[1])
             res3 = redisAI.tensorToFlatList(res[2])
-            redisgears.executeCommand('xadd', 'logsuccessful1', '*', 'text', 'successful')
-            redisgears.executeCommand('xadd', 'result', '*', 'text', inputs)
-            redisgears.executeCommand('xadd', 'result1', '*', 'text', res1)
-            redisgears.executeCommand('xadd', 'result2', '*', 'text', res2)
-            redisgears.executeCommand('xadd', 'result3', '*', 'text', res3)
-            redisgears.executeCommand('xadd', 'result5', '*', 'text', res)
-
+          
             deleteLowProbResult = []
             for idx,prediction in enumerate(res2):
                 if(prediction < 0.5):
@@ -99,21 +89,24 @@ def predict_image(image):
             detectedclasses = np.delete(res3, deleteLowProbResult)
 
             add_boxes_to_images(image,detectedboxes,detectedclasses)
-
+            return res1,res2,res3
         except:
-            xlog('addToGraphRunnerDronePredictImage1: error:', sys.exc_info()[0])
+            xlog('Predict_image: error:', sys.exc_info()[0])
 
-def addToGraphRunnerDrone(x):
+def addToStream(x):
+    # save animal name into a new stream
     try:
-        predict_image(x['value']['image'])
-        return 'chirag'
+        redisgears.executeCommand('xadd', 'result1', '*', 'text', x[0])
+        redisgears.executeCommand('xadd', 'result2', '*', 'text', x[1])
+        redisgears.executeCommand('xadd', 'result3', '*', 'text', x[2])
     except:
-        xlog('addToGraphRunnerDrone: error:', sys.exc_info()[0])
+        xlog('addToStream: error:', sys.exc_info()[0])
 
 def xlog(*args):
     redisgears.executeCommand('xadd', 'log', '*', 'text', ' '.join(map(str, args)))
 
 
 GearsBuilder('StreamReader').\
-    map(addToGraphRunnerDrone).\
+    map(predictImage).\
+    foreach(addToStream).\
     register('airsimrunner')
