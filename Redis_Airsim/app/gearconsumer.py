@@ -7,12 +7,13 @@ import numpy as np
 import redisAI
 import redisgears
 from azure.storage.blob import BlobClient
+from azure.storage.blob import ContainerClient
 
 
 MAX_IMAGES = 50
 Labels = ["CultivatedLand","InFertileLand","Others"]
 Connection_String = 'DefaultEndpointsProtocol=https;AccountName=droneredissg;AccountKey=hJx8SCf/fYN0zpOJvoAdfLv+JHwDDNO0ZScseOZI4xATYOuU4mI2I4LPbCy/qerO4jrw2zf1AgIC1diDQuayWw==;EndpointSuffix=core.windows.net'
-
+ContainerName = 'droneimages'
 
 def add_boxes_to_images(img, predictions,classes,blob):
     try:
@@ -41,6 +42,14 @@ def saveImageToAzure(img,blob):
         blob.upload_blob(img_byte_arr)
     except:
         xlog('saveImageToAzure: error:', sys.exc_info()[0])
+
+def getBlobUrl(imagename):
+    try:
+        container_client = ContainerClient.from_connection_string(conn_str=Connection_String, container_name="droneimages")
+        blob_client = container_client.get_blob_client(imagename) 
+        return blob_client.url
+    except:
+        xlog('getBlobUrl: error:', sys.exc_info()[0])
 
 
 def predictImage(x):
@@ -82,9 +91,10 @@ def predictImage(x):
             detectedClasses = np.delete(res3, deleteLowProbResult)
             
             imagename = x['value']['imagename']
-            blob = BlobClient.from_connection_string(conn_str=Connection_String, container_name="droneimages", blob_name=imagename)
+            blob = BlobClient.from_connection_string(conn_str=Connection_String, container_name=ContainerName, blob_name=imagename)
             add_boxes_to_images(image,detectedBoxes,detectedClasses,blob)
-            return detectedProbability,detectedClasses
+            bloburl = getBlobUrl(imagename)
+            return detectedProbability,detectedClasses,bloburl
         except:
             xlog('Predict_image: error:', sys.exc_info()[0])
 
@@ -92,6 +102,7 @@ def addToStream(x):
     try:
         detectedProbabilities =  x[0].tolist()
         detectedClasses = x[1].tolist()
+        bloburl = x[2]
         result = []
         for idx,prediction in enumerate(Labels):
             try:
@@ -99,6 +110,7 @@ def addToStream(x):
                 result.append([prediction,detectedProbabilities[index] * 100])
             except: 
                 result.append([prediction,0])
+        result.append(['fileUrl',bloburl])
         redisgears.executeCommand('xadd', 'predictions', '*',*sum(result, []))
     except:
         xlog('addToStream: error:', sys.exc_info()[0])
