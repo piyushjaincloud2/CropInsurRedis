@@ -10,12 +10,10 @@ MAX_IMAGES = 50
 imagename = "2.jpg"
 img0 = cv2.imread("2.jpg")
 _, data = cv2.imencode('.jpg', img0)
-print(data)
-storedimg = data.tobytes()
-print(storedimg)
+storedimg = data.tobytes()  
 msg = {
     'imagename': imagename,
     'image': storedimg
 }
 
-#conn.execute_command('xadd', 'airsimrunner',  'MAXLEN', '~', str(MAX_IMAGES), '*','imagename', msg['imagename'], 'image', msg['image'])
+conn.execute_command('xadd', 'airsimrunner',  'MAXLEN', '~', str(MAX_IMAGES), '*','imagename', msg['imagename'], 'image', msg['image'])
