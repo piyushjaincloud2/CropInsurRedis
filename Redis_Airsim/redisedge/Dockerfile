@@ -11,8 +11,7 @@ RUN set -ex; \
     pip3 install -U pipenv;
 
 
-ADD ./arial.ttf /var/opt/redislabs/modules/rg/python3_1.0.6/
-ADD ./ariblk.ttf /var/opt/redislabs/modules/rg/python3_1.0.6/
+ADD ./fonts /var/opt/redislabs/modules/rg/python3_1.0.6/fonts
 
 ADD ./requirements.txt /tmp/requirements.txt
 

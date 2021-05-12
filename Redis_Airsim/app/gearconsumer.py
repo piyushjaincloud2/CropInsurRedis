@@ -24,7 +24,7 @@ def add_boxes_to_images(img, predictions,classes,blob):
             height = int(pred[3] * 600)
             shape = [(x, y), (width, height)]
             
-            font = ImageFont.truetype(r'/var/opt/redislabs/modules/rg/python3_1.0.6/ariblk.ttf', 20)
+            font = ImageFont.truetype(r'/var/opt/redislabs/modules/rg/python3_1.0.6/fonts/ariblk.ttf', 20)
             text = Labels[classes[idx]]
 
             ImageDraw.Draw(img).rectangle(shape, outline ="red") 
@@ -64,6 +64,10 @@ def predictImage(x):
             res1 = redisAI.tensorToFlatList(res[0])
             res2 = redisAI.tensorToFlatList(res[1])
             res3 = redisAI.tensorToFlatList(res[2])
+
+            redisgears.executeCommand('xadd', 'result1', '*', 'text', res1)
+            redisgears.executeCommand('xadd', 'result2', '*', 'text', res2)
+            redisgears.executeCommand('xadd', 'result3', '*', 'text', res3)
           
             deleteLowProbResult = []
             for idx,prediction in enumerate(res2):
@@ -73,21 +77,29 @@ def predictImage(x):
             array_2d_rowcount = int(len(res1)/4)
             arr_2d = np.reshape(res1, (array_2d_rowcount, 4))
 
-            detectedboxes = np.delete(arr_2d, deleteLowProbResult, axis=0)
-            detectedclasses = np.delete(res3, deleteLowProbResult)
+            detectedBoxes = np.delete(arr_2d, deleteLowProbResult, axis=0)
+            detectedProbability =  np.delete(res2, deleteLowProbResult)
+            detectedClasses = np.delete(res3, deleteLowProbResult)
             
             imagename = x['value']['imagename']
             blob = BlobClient.from_connection_string(conn_str=Connection_String, container_name="droneimages", blob_name=imagename)
-            add_boxes_to_images(image,detectedboxes,detectedclasses,blob)
-            return res1,res2,res3
+            add_boxes_to_images(image,detectedBoxes,detectedClasses,blob)
+            return detectedProbability,detectedClasses
         except:
             xlog('Predict_image: error:', sys.exc_info()[0])
 
 def addToStream(x):
     try:
-        redisgears.executeCommand('xadd', 'result1', '*', 'text', x[0])
-        redisgears.executeCommand('xadd', 'result2', '*', 'text', x[1])
-        redisgears.executeCommand('xadd', 'result3', '*', 'text', x[2])
+        detectedProbabilities =  x[0].tolist()
+        detectedClasses = x[1].tolist()
+        result = []
+        for idx,prediction in enumerate(Labels):
+            try:
+                index = detectedClasses.index(idx)
+                result.append([prediction,detectedProbabilities[index] * 100])
+            except: 
+                result.append([prediction,0])
+        redisgears.executeCommand('xadd', 'predictions', '*',*sum(result, []))
     except:
         xlog('addToStream: error:', sys.exc_info()[0])
 
