@@ -16,8 +16,8 @@ def SetCameraPose(client):
 def addToStream(iteration,img_rgb,imagename):
     _, data = cv2.imencode('.jpg', img_rgb)
     storedimg = data.tobytes()
-    iteration['imagename'] = imagename
-    iteration['image'] = storedimg
+    iteration.append(['imagename',imagename])
+    iteration.append(['image',storedimg])
     conn.execute_command('xadd', 'airsimrunner',  'MAXLEN', '~', str(MAX_IMAGES), '*', *sum(iteration, []))
 
 
@@ -36,7 +36,7 @@ def main():
     input.append(['windSpeed',5])
 
     while(client.isApiControlEnabled()):
-        print(input)
+        iteration = input[:]
         filepath = os.path.join(temp_dir, str(count))
         imagename = str(count) + '.jpg'
         simImages = client.simGetImages([airsim.ImageRequest("1", airsim.ImageType.Scene, False, False)])
@@ -47,7 +47,7 @@ def main():
         filepath = os.path.join(temp_dir, str(count))
         cv2.imwrite(os.path.normpath(filepath + '.jpg'), img_rgb)
 
-        addToStream(input,img_rgb,imagename)
+        addToStream(iteration,img_rgb,imagename)
         time.sleep(2)
         print(count)
         count += 1

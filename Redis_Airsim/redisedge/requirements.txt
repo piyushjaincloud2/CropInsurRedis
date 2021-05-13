@@ -3,3 +3,4 @@ opencv-python==4.0.1.23
 Pillow==8.2.0
 azure-storage-blob
 imageio
+pandas

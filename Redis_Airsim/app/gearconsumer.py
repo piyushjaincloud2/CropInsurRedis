@@ -8,6 +8,7 @@ import redisAI
 import redisgears
 from azure.storage.blob import BlobClient
 from azure.storage.blob import ContainerClient
+import pandas as pd
 
 
 MAX_IMAGES = 50
@@ -108,18 +109,26 @@ def addToStream(x):
         weatherCondition = x[3]
         windSpeed = x[4]
         result = []
-        for idx,prediction in enumerate(Labels):
-            try:
-                index = detectedClasses.index(idx)
-                result.append([prediction,detectedProbabilities[index] * 100])
-            except: 
-                result.append([prediction,0])
-        result.append(['FileUrl',bloburl])
-        result.append(['Weather',weatherCondition])
-        result.append(['WindSpeed',windSpeed])
-        redisgears.executeCommand('xadd', 'predictions', '*',*sum(result, []))
+        streamResult = []
+        for idx,prediction in enumerate(detectedClasses):
+            result.append([Labels[prediction],detectedProbabilities[idx] * 100])
+
+        for idx,label in enumerate(Labels):
+            if not idx in detectedClasses:
+                result.append([label,0])
+        
+        df = pd.DataFrame(result)
+        result = df.groupby(0)[1].mean()
+
+        for (columnName, columnData) in result.iteritems():
+            streamResult.append([columnName,columnData])
+
+        streamResult.append(['FileUrl',bloburl])
+        streamResult.append(['Weather',weatherCondition])
+        streamResult.append(['WindSpeed',windSpeed])
+        redisgears.executeCommand('xadd', 'predictions', '*',*sum(streamResult, []))
     except:
-        xlog('addToStream: error:', sys.exc_info()[0])
+        xlog('addToStream: error:', sys.exc_info())
 
 def xlog(*args):
     redisgears.executeCommand('xadd', 'log', '*', 'text', ' '.join(map(str, args)))
