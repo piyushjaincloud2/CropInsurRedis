@@ -94,7 +94,9 @@ def predictImage(x):
             blob = BlobClient.from_connection_string(conn_str=Connection_String, container_name=ContainerName, blob_name=imagename)
             add_boxes_to_images(image,detectedBoxes,detectedClasses,blob)
             bloburl = getBlobUrl(imagename)
-            return detectedProbability,detectedClasses,bloburl
+            weatherCondition = x['value']['weather']
+            windSpeed = x['value']['windSpeed']
+            return detectedProbability,detectedClasses,bloburl,weatherCondition,windSpeed
         except:
             xlog('Predict_image: error:', sys.exc_info()[0])
 
@@ -103,6 +105,8 @@ def addToStream(x):
         detectedProbabilities =  x[0].tolist()
         detectedClasses = x[1].tolist()
         bloburl = x[2]
+        weatherCondition = x[3]
+        windSpeed = x[4]
         result = []
         for idx,prediction in enumerate(Labels):
             try:
@@ -110,7 +114,9 @@ def addToStream(x):
                 result.append([prediction,detectedProbabilities[index] * 100])
             except: 
                 result.append([prediction,0])
-        result.append(['fileUrl',bloburl])
+        result.append(['FileUrl',bloburl])
+        result.append(['Weather',weatherCondition])
+        result.append(['WindSpeed',windSpeed])
         redisgears.executeCommand('xadd', 'predictions', '*',*sum(result, []))
     except:
         xlog('addToStream: error:', sys.exc_info()[0])

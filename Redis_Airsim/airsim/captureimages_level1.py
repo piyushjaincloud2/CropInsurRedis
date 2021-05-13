@@ -6,9 +6,19 @@ import cv2
 import redis
 
 
+conn = redis.Redis(host='localhost', port=6379)
+MAX_IMAGES = 50
+
 def SetCameraPose(client):
     camera_pose = airsim.Pose(airsim.Vector3r(0, 0, 0), airsim.to_quaternion(-1.5708, 0, 0))
     client.simSetCameraPose(1, camera_pose)
+
+def addToStream(iteration,img_rgb,imagename):
+    _, data = cv2.imencode('.jpg', img_rgb)
+    storedimg = data.tobytes()
+    iteration['imagename'] = imagename
+    iteration['image'] = storedimg
+    conn.execute_command('xadd', 'airsimrunner',  'MAXLEN', '~', str(MAX_IMAGES), '*', *sum(iteration, []))
 
 
 def main():
@@ -17,12 +27,16 @@ def main():
     count=1
 
     SetCameraPose(client)
-    conn = redis.Redis(host='localhost', port=6379)
-    MAX_IMAGES = 50
+    
     temp_dir = os.path.join(os.getcwd(), "airsim_drone")
 
+    input = []
+
+    input.append(['weather','Rain'])
+    input.append(['windSpeed',5])
+
     while(client.isApiControlEnabled()):
-        
+        print(input)
         filepath = os.path.join(temp_dir, str(count))
         imagename = str(count) + '.jpg'
         simImages = client.simGetImages([airsim.ImageRequest("1", airsim.ImageType.Scene, False, False)])
@@ -33,13 +47,7 @@ def main():
         filepath = os.path.join(temp_dir, str(count))
         cv2.imwrite(os.path.normpath(filepath + '.jpg'), img_rgb)
 
-        _, data = cv2.imencode('.jpg', img_rgb)
-        storedimg = data.tobytes()
-        msg = {
-            'imagename': imagename,
-            'image': storedimg
-        }
-        conn.execute_command('xadd', 'airsimrunner',  'MAXLEN', '~', str(MAX_IMAGES), '*','imagename', msg['imagename'], 'image', msg['image'])
+        addToStream(input,img_rgb,imagename)
         time.sleep(2)
         print(count)
         count += 1
