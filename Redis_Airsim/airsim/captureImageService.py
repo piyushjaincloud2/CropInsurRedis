@@ -3,7 +3,7 @@ import numpy as np
 import cv2
 import airsim
 
-class FlyService:
+class CaptureImageService:
     @staticmethod
     def setCameraPose(client):
         camera_pose = airsim.Pose(airsim.Vector3r(0, 0, 0), airsim.to_quaternion(-1.5708, 0, 0))
