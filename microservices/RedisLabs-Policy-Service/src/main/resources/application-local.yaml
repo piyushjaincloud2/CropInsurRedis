@@ -1,0 +1,25 @@
+feign:
+  policy:
+    url: http://policy-service:8081/policy
+spring:
+  redis:
+    host: 192.168.99.100
+    port: 6379
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    initialization-mode: always
+    password: India@2019
+    testWhileIdle: true
+    url: "jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/insurance"
+    username: root
+    validationQuery: SELECT 1
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 128KB
+      max-request-size: 128KB

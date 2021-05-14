@@ -1,0 +1,24 @@
+feign:
+  policy:
+    url: http://policy-service:8081/policy
+spring:
+  redis:
+    host: redis-service
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    initialization-mode: always
+    password: root
+    testWhileIdle: true
+    url: "jdbc:mysql://mysql-service/test"
+    username: root
+    validationQuery: SELECT 1
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 128KB
+      max-request-size: 128KB

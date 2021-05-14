@@ -1,0 +1,190 @@
+{
+	"info": {
+		"_postman_id": "8f9e788b-0644-40cb-a781-1618bc3f8f7f",
+		"name": "Redis Lab",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get All Customer",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/customer/get",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"customer",
+						"get"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Customer By Id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/customer/get/4cb4bdd9-492d-49f2-8e98-c11f5902015f",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"customer",
+						"get",
+						"4cb4bdd9-492d-49f2-8e98-c11f5902015f"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Save Customer",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Brijesh Kumar\",\r\n    \"email\": \"jeshu911@gmail.com\",\r\n    \"age\": \"33\",\r\n    \"gender\": \"male\",\r\n    \"mobile\": \"+919871746836\",\r\n    \"location\": \"India\",\r\n    \"address\": \"NA\",\r\n    \"experience\": \"10\",\r\n    \"properties\": [{\r\n        \"premiumRate\": \"2\",\r\n        \"cropType\": \"rice\",\r\n        \"farmArea\": \"29\",\r\n        \"expectedYeild\": \"29\",\r\n        \"expectedMarketPrice\": \"23\",\r\n        \"coveragePeriod\": \"4\",\r\n        \"latitude\": \"101.322\",\r\n        \"longitude\": \"91.32655\"\r\n    }]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://40.117.227.179:8080/customer/save",
+					"protocol": "http",
+					"host": [
+						"40",
+						"117",
+						"227",
+						"179"
+					],
+					"port": "8080",
+					"path": [
+						"customer",
+						"save"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Save Policy",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"inspectionId\": \"32434-3071-41b2-9ae3-57fd873def11\",\r\n    \"customerId\": \"4cb4bdd9-492d-49f2-8e98-c11f5902015f\",\r\n    \"propertyId\": \"fdbbddd9-3071-41b2-9ae3-57fd873def11\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/policy/save",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"policy",
+						"save"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Inspection",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"123\",\r\n    \"customerId\": \"4cb4bdd9-492d-49f2-8e98-c11f5902015f\",\r\n    \"propertyId\": \"fdbbddd9-3071-41b2-9ae3-57fd873def11\",\r\n    \"fieldDataList\": [\r\n        {\r\n            \"fileName\": \"test\",\r\n            \"weather\": \"etest\",\r\n            \"cultivatedLand\": 10,\r\n            \"damageArea\": 12,\r\n            \"highQualityCrop\": \"12\",\r\n            \"lowQualityCrop\": \"12\",\r\n            \"other\": \"10\",\r\n            \"inFertileLand\": \"22\",\r\n            \"water\": \"34\",\r\n            \"isDone\": false,\r\n            \"windSpeed\": \"23\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8082/inspection/save",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"inspection",
+						"save"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Inspection",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/inspection/get/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"inspection",
+						"get",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Claim Save",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"inspectionId\":\"234242\",\r\n    \"propertyId\":\"234245345436464\",\r\n    \"customerId\":\"3243543\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/policy/claim",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"policy",
+						"claim"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
