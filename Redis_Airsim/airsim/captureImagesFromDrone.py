@@ -7,7 +7,8 @@ import redis
 import argparse
 from captureImageService import CaptureImageService
 
-conn = redis.Redis(host='40.117.227.179', port=6379)
+# conn = redis.Redis(host='40.117.227.179', port=6379)
+conn = redis.Redis(host='localhost', port=6379)
 MAX_IMAGES = 50
 
 def convertToMap(data):
@@ -37,19 +38,23 @@ if __name__ == '__main__':
        print('Level 1')
        input.append(['weather','Rain'])
        input.append(['windSpeed',5])
-    
-    count=1
 
     try:
         conn.execute_command('xgroup','CREATE','inspection','InspectionGroup','$','MKSTREAM')
     except:
         print("Consumer Group already  exist")
-    
-    while True:
-        res = conn.execute_command('xreadgroup','GROUP', 'InspectionGroup','InspectionConsumer','Block', 100000,'STREAMS', 'inspection','>')
-        print(res)
-        if res:
-            try:
+   
+      
+    try:
+        client = airsim.VehicleClient()
+        client.confirmConnection()
+        while True:
+            res = conn.execute_command('xreadgroup','GROUP', 'InspectionGroup','InspectionConsumer','Block', 10000,'STREAMS', 'inspection','>')
+            if res:
+                print("Signal received from stream")
+                print(res)
+                    
+                count=1
                 currentStream = res[0][1][0]
                 currentStreamMap = convertToMap(currentStream)
                 currentStreamMapList = list(currentStreamMap)
@@ -57,13 +62,18 @@ if __name__ == '__main__':
                 inspectionId = currentStreamMapList[1]['inspectionId']
                 print("Inspection ID is " + inspectionId )
                 print("Stream ID is " + streamID )
-                res = conn.execute_command('xack','inspection','InspectionGroup',streamID)
-
-                client = airsim.VehicleClient()
-                client.confirmConnection()
 
                 CaptureImageService.setCameraPose(client)
-                print("Stream Acknowledged " + str(res))
+                print("Is Airsim connected :")
+                print(client.isApiControlEnabled())
+
+                while not client.isApiControlEnabled():
+                    print("Client not taken off yet")
+                    time.sleep(1)
+
+                if client.isApiControlEnabled():
+                    res = conn.execute_command('xack','inspection','InspectionGroup',streamID)
+                    print("Stream Acknowledged " + str(res))
 
                 while(client.isApiControlEnabled()):
                     iteration = input[:]
@@ -78,7 +88,10 @@ if __name__ == '__main__':
                 lastRow.append(['isDone','1'])
                 lastRow.append(['imagename',''])
                 lastRow.append(['image',''])
+                print("Saving Final Row")
                 conn.execute_command('xadd', 'inspectiondata',  'MAXLEN', '~', str(MAX_IMAGES), '*', *sum(lastRow,[]))
-            except:
-                print("Airsim is not yet ready")
+            else:
+                print("Yet no input from stream")
+    except:
+        print("Airsim is not yet ready")
     
