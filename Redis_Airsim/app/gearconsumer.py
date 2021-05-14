@@ -120,8 +120,6 @@ def predictImage(x):
 
 def addToStream(x):
     try:
-        redisgears.executeCommand('xadd', 'result15', '*', 'text', type(x[0]))
-        redisgears.executeCommand('xadd', 'result16', '*', 'text', type(x[1]))
         detectedProbabilities =  x[0].tolist()
         detectedClasses = x[1].tolist()
         bloburl = x[2]

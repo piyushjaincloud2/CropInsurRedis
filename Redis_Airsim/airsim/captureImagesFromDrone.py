@@ -22,11 +22,6 @@ if __name__ == '__main__':
     parser.add_argument('-u', '--level', help='Game Level', type=int, default=1)
     args = parser.parse_args()
 
-    client = airsim.VehicleClient()
-    client.confirmConnection()
-
-    CaptureImageService.setCameraPose(client)
-    
     gameLevel = args.level
     print(gameLevel)
     input = []
@@ -49,31 +44,41 @@ if __name__ == '__main__':
         conn.execute_command('xgroup','CREATE','inspection','InspectionGroup','$','MKSTREAM')
     except:
         print("Consumer Group already  exist")
+    
+    while True:
+        res = conn.execute_command('xreadgroup','GROUP', 'InspectionGroup','InspectionConsumer','Block', 100000,'STREAMS', 'inspection','>')
+        print(res)
+        if res:
+            try:
+                currentStream = res[0][1][0]
+                currentStreamMap = convertToMap(currentStream)
+                currentStreamMapList = list(currentStreamMap)
+                streamID = currentStreamMapList[0]
+                inspectionId = currentStreamMapList[1]['inspectionId']
+                print("Inspection ID is " + inspectionId )
+                print("Stream ID is " + streamID )
+                res = conn.execute_command('xack','inspection','InspectionGroup',streamID)
 
-    res = conn.execute_command('xreadgroup','GROUP', 'InspectionGroup','InspectionConsumer','Block', 30000,'STREAMS', 'inspection', '>')
-    currentStream = res[0][1][0]
-    currentStreamMap = convertToMap(currentStream)
-    currentStreamMapList = list(currentStreamMap)
-    streamID = currentStreamMapList[0]
-    inspectionId = currentStreamMapList[1]['test']
-    print("Inspection ID is " + inspectionId )
-    print("Stream ID is " + streamID )
+                client = airsim.VehicleClient()
+                client.confirmConnection()
 
-    res = conn.execute_command('xack','inspection','InspectionGroup',streamID)
-    print("Stream Acknowledged " + str(res))
+                CaptureImageService.setCameraPose(client)
+                print("Stream Acknowledged " + str(res))
 
-    while(client.isApiControlEnabled()):
-        iteration = input[:]
-        imagename = inspectionId + "_" + str(count) + '.jpg'
-        img_rgb = CaptureImageService.getRealTimeImage(client,count)
-        CaptureImageService.addToStream(conn,img_rgb,iteration,imagename,MAX_IMAGES)
-        time.sleep(2)
-        print(count)
-        count += 1
+                while(client.isApiControlEnabled()):
+                    iteration = input[:]
+                    imagename = inspectionId + "_" + str(count) + '.jpg'
+                    img_rgb = CaptureImageService.getRealTimeImage(client,count)
+                    CaptureImageService.addToStream(conn,img_rgb,iteration,imagename,MAX_IMAGES)
+                    time.sleep(2)
+                    print(count)
+                    count += 1
 
-    lastRow = input[:]
-    lastRow.append(['isDone','1'])
-    lastRow.append(['imagename',''])
-    lastRow.append(['image',''])
-    conn.execute_command('xadd', 'inspectiondata',  'MAXLEN', '~', str(MAX_IMAGES), '*', *sum(lastRow,[]))
+                lastRow = input[:]
+                lastRow.append(['isDone','1'])
+                lastRow.append(['imagename',''])
+                lastRow.append(['image',''])
+                conn.execute_command('xadd', 'inspectiondata',  'MAXLEN', '~', str(MAX_IMAGES), '*', *sum(lastRow,[]))
+            except:
+                print("Airsim is not yet ready")
     

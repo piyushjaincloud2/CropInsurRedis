@@ -6,13 +6,18 @@ conn = redis.Redis(host='localhost', port=6379)
 #     res1 = conn.execute_command('xinfo','GROUPS','inspection')
 # except:
 
-# res1 = conn.execute_command('xgroup','CREATE','inspection','InspectionGroup','$','MKSTREAM')
-# print(res1)
+
+try:
+    res1 = conn.execute_command('xgroup','CREATE','inspection','InspectionGroup','$','MKSTREAM')
+    print(res1)
+except:
+    print("Consumer Group already  exist")
 
 
-# res = conn.execute_command('xreadgroup','GROUP', 'InspectionGroup','A','Block', 30000,'STREAMS', 'inspection', '>')
+res = conn.execute_command('xreadgroup','GROUP', 'InspectionGroup','InspectionConsumer','Block', 30000,'STREAMS', 'inspection','>')
 
-# print(res)
+currentStream = res[0][1][0]
+print(currentStream)
 
 # def convert(data):
 #     if isinstance(data, bytes):  return data.decode('ascii')
@@ -27,5 +32,5 @@ conn = redis.Redis(host='localhost', port=6379)
 # print(list1[0])
 # res = conn.execute_command('xack','inspection','test',list1[0])
 # print(res)
-detectedProbability = np.array([]) 
-print(type(detectedProbability))
+# detectedProbability = np.array([]) 
+# print(type(detectedProbability))
