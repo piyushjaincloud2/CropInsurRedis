@@ -1,25 +1,14 @@
 {
-    "app_name": "Dronification of Crop-insurance Powered by Drone, AI, Redis and Cloud technologies",  //Name of the app
-    "description": "Enable Crop Insurance company to generate insurance policy and claim settlement using Drone, Redis and Cloud Technologies to ensure transparency, Quick turn around time with 100% accuracy and client satisfaction.", // One line description
-    "hidden": true, // Can be "true" or "false". If true, this app won't show up in Marketplace.
-    "rank": 23, // This is used to sort the apps in the marketplace. 1 to 20 are reserved. Enter greater than 20
-    "type": "Building Block", //Can be "Building Block" or "Full App"
-    "contributed_by": "Community", // Can be "Redis Labs" or "Community" or "Partner"
-    "repo_url": "https://github.com/redis-developer/basic-caching-demo-nodejs", //This is the Gitub Repo's URL.
-    "download_url": "https://github.com/redis-developer/basic-caching-demo-nodejs/archive/main.zip",
-    "hosted_url": "", //The URL of the app. if you are hosting this app somewhere
-    "quick_deploy": "true", //"frue" if the project has Heroku, Vercel, Google deploy buttons
-    "deploy_buttons": [
-        {
-            "heroku": "https://heroku.com/deploy?template=https://github.com/redis-developer/basic-caching-demo-nodejs" //Deploy button URL for deploying on Heroku
-        },
-        {
-            "vercel": "https://vercel.com/new/git/external?repository-url=https%3A%2F%2Fgithub.com%2Fredis-developer%2Fbasic-caching-demo-nodejs&env=REDIS_ENDPOINT_URI,REDIS_PASSWORD&envDescription=REDIS_ENDPOINT_URI%20is%20required%20at%20least%20to%20connect%20to%20Redis%20clouding%20server" //Deploy button URL for deploying on Vercel
-        },
-        {
-            "Google": "https://deploy.cloud.run/?git_repo=https://github.com/redis-developer/basic-caching-demo-nodejs.git" //Deploy button URL for deploying on Google cloud.
-        }
-    ],
+    "app_name": "Dronification of Crop-insurance Powered by Drone, AI, Redis and Cloud technologies",  
+    "description": "Enable Crop Insurance company to generate insurance policy and claim settlement using Drone, Redis and Cloud Technologies to ensure transparency, Quick turn around time with 100% accuracy and client satisfaction.", 
+    "hidden": true, 
+    "rank": 23, 
+    "type": "Building Block", 
+    "contributed_by": "Community", 
+    "repo_url": "https://github.com/piyushjaincloud2/CropInsurRedis",
+    "download_url": "https://github.com/piyushjaincloud2/CropInsurRedis/archive/refs/heads/main.zip",
+    "hosted_url": "", 
+    "quick_deploy": "false", 
     "language": ["JavaScript"], // Backend technologies: "JavaScript", "Java", "Python", "Go", "C#", "Ruby", "PHP", etc. 
     "redis_commands": ["SETEX"], // Enter all the Redis commands
     "redis_features": ["caching"],// Enter any core Redis feature or leave it blank.
