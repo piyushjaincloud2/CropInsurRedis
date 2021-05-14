@@ -13,7 +13,8 @@ Step 1: Using a micorsoft custom Vision service, we will trained the model which
 Step 2: When insurer register a new customer, front end app will call "Savecustomer" API to save data in the MySQL DB.  
 Step 3: When insurer click on the inspection button from the front end portal, A signal with new Inspection ID will be push to Redis Stream which inform Drone to start inspection of the land as the information provided by customer.  
 Step 4: Drone started inspection, it keep pushing images to Redis stream and redis gears container will process this images using pre defined/trained transor flow model.  
-Step 5: This Modelled  images save to Azure blob storage and all other information will be push to redis stream to front end app where it showing all data to insurer portal.   Step 6: When Drone stop scanning complete, front end will call "SaveInspection" API to save all data to the MSQL DB.  
+Step 5: This Modelled  images save to Azure blob storage and all other information will be push to redis stream to front end app where it showing all data to insurer portal.    
+Step 6: When Drone stop scanning complete, front end will call "SaveInspection" API to save all data to the MSQL DB.  
 Step 7: Also based on this information system will automatically show sumassured and single premimum (single premium value also added a risk factor based on past claimed data of all other customers in that area) to the portal where customer and insurer can agree and create a new policy.  
 Step 8: Similarly insurer can do multiple inspection of the same property and if required after inspection, insurer can generate a claim for the given policy.      
 Step 9: Front end portal will intract with differnt micorservices to save and get the data on the portal.   
