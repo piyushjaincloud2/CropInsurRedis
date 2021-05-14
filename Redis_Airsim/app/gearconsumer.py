@@ -13,7 +13,7 @@ import pandas as pd
 
 
 MAX_IMAGES = 50
-Labels = ["CultivatedLand","InFertileLand","Others"]
+Labels = ["cultivatedLand","inFertileLand","other","highQualityCrop","lowQualityCrop","damageArea"]
 Connection_String = 'DefaultEndpointsProtocol=https;AccountName=droneredissg;AccountKey=hJx8SCf/fYN0zpOJvoAdfLv+JHwDDNO0ZScseOZI4xATYOuU4mI2I4LPbCy/qerO4jrw2zf1AgIC1diDQuayWw==;EndpointSuffix=core.windows.net'
 ContainerName = 'droneimages'
 
@@ -65,62 +65,73 @@ def getSecret(secretName):
 
 def predictImage(x):
         try:
-            image_data = io.BytesIO(x['value']['image'])
-            image = Image.open(image_data)
-            numpy_img = np.array(image)
-            resize_img = cv2.resize(numpy_img, (320, 320), interpolation=cv2.INTER_LINEAR)
-            inputs = np.array(resize_img, dtype=np.float32)[np.newaxis, :, :, :]
-            img_ba = bytearray(inputs.tobytes())
-            v1 = redisAI.createTensorFromBlob('FLOAT', [1, 320, 320, 3], img_ba)
+            detectedProbability = np.array([]) 
+            detectedClasses = np.array([])
+            bloburl = ''
+            if x['value']['image']:
+                image_data = io.BytesIO(x['value']['image'])
+                image = Image.open(image_data)
+                numpy_img = np.array(image)
+                resize_img = cv2.resize(numpy_img, (320, 320), interpolation=cv2.INTER_LINEAR)
+                inputs = np.array(resize_img, dtype=np.float32)[np.newaxis, :, :, :]
+                img_ba = bytearray(inputs.tobytes())
+                v1 = redisAI.createTensorFromBlob('FLOAT', [1, 320, 320, 3], img_ba)
 
-            graphRunner = redisAI.createModelRunner('customvisionmodel')
-            redisAI.modelRunnerAddInput(graphRunner, 'image_tensor', v1)
-            redisAI.modelRunnerAddOutput(graphRunner, 'detected_boxes')
-            redisAI.modelRunnerAddOutput(graphRunner, 'detected_scores')
-            redisAI.modelRunnerAddOutput(graphRunner, 'detected_classes')
+                graphRunner = redisAI.createModelRunner('customvisionmodel')
+                redisAI.modelRunnerAddInput(graphRunner, 'image_tensor', v1)
+                redisAI.modelRunnerAddOutput(graphRunner, 'detected_boxes')
+                redisAI.modelRunnerAddOutput(graphRunner, 'detected_scores')
+                redisAI.modelRunnerAddOutput(graphRunner, 'detected_classes')
 
-            res = redisAI.modelRunnerRun(graphRunner)
+                res = redisAI.modelRunnerRun(graphRunner)
 
-            res1 = redisAI.tensorToFlatList(res[0])
-            res2 = redisAI.tensorToFlatList(res[1])
-            res3 = redisAI.tensorToFlatList(res[2])
+                res1 = redisAI.tensorToFlatList(res[0])
+                res2 = redisAI.tensorToFlatList(res[1])
+                res3 = redisAI.tensorToFlatList(res[2])
 
-            redisgears.executeCommand('xadd', 'result1', '*', 'text', res1)
-            redisgears.executeCommand('xadd', 'result2', '*', 'text', res2)
-            redisgears.executeCommand('xadd', 'result3', '*', 'text', res3)
-          
-            deleteLowProbResult = []
-            for idx,prediction in enumerate(res2):
-                if(prediction < 0.5):
-                    deleteLowProbResult.append(idx)
-
-            array_2d_rowcount = int(len(res1)/4)
-            arr_2d = np.reshape(res1, (array_2d_rowcount, 4))
-
-            detectedBoxes = np.delete(arr_2d, deleteLowProbResult, axis=0)
-            detectedProbability =  np.delete(res2, deleteLowProbResult)
-            detectedClasses = np.delete(res3, deleteLowProbResult)
+                redisgears.executeCommand('xadd', 'result1', '*', 'text', res1)
+                redisgears.executeCommand('xadd', 'result2', '*', 'text', res2)
+                redisgears.executeCommand('xadd', 'result3', '*', 'text', res3)
             
-            imagename = x['value']['imagename']
-            getSecret("azure_blob_secret")
-            blob = BlobClient.from_connection_string(conn_str=Connection_String, container_name=ContainerName, blob_name=imagename)
-            add_boxes_to_images(image,detectedBoxes,detectedClasses,blob)
-            bloburl = getBlobUrl(imagename)
+                deleteLowProbResult = []
+                for idx,prediction in enumerate(res2):
+                    if(prediction < 0.5):
+                        deleteLowProbResult.append(idx)
+
+                array_2d_rowcount = int(len(res1)/4)
+                arr_2d = np.reshape(res1, (array_2d_rowcount, 4))
+
+                detectedBoxes = np.delete(arr_2d, deleteLowProbResult, axis=0)
+                detectedProbability =  np.delete(res2, deleteLowProbResult)
+                detectedClasses = np.delete(res3, deleteLowProbResult)
+                
+                imagename = x['value']['imagename']
+                getSecret("azure_blob_secret")
+                blob = BlobClient.from_connection_string(conn_str=Connection_String, container_name=ContainerName, blob_name=imagename)
+                add_boxes_to_images(image,detectedBoxes,detectedClasses,blob)
+                bloburl = getBlobUrl(imagename)
+            
             weatherCondition = x['value']['weather']
             windSpeed = x['value']['windSpeed']
-            return detectedProbability,detectedClasses,bloburl,weatherCondition,windSpeed
+            isDone = x['value']['isDone']
+            return detectedProbability,detectedClasses,bloburl,weatherCondition,windSpeed,isDone
         except:
             xlog('Predict_image: error:', sys.exc_info()[0])
 
 def addToStream(x):
     try:
+        redisgears.executeCommand('xadd', 'result15', '*', 'text', type(x[0]))
+        redisgears.executeCommand('xadd', 'result16', '*', 'text', type(x[1]))
         detectedProbabilities =  x[0].tolist()
         detectedClasses = x[1].tolist()
         bloburl = x[2]
         weatherCondition = x[3]
         windSpeed = x[4]
+        isDone = x[5]
+        
         result = []
         streamResult = []
+
         for idx,prediction in enumerate(detectedClasses):
             result.append([Labels[prediction],detectedProbabilities[idx] * 100])
 
@@ -134,9 +145,10 @@ def addToStream(x):
         for (columnName, columnData) in result.iteritems():
             streamResult.append([columnName,columnData])
 
-        streamResult.append(['FileUrl',bloburl])
-        streamResult.append(['Weather',weatherCondition])
-        streamResult.append(['WindSpeed',windSpeed])
+        streamResult.append(['fileName',bloburl])
+        streamResult.append(['isDone',isDone])
+        streamResult.append(['weather',weatherCondition])
+        streamResult.append(['windSpeed',windSpeed])
         redisgears.executeCommand('xadd', 'predictions', '*',*sum(streamResult, []))
     except:
         xlog('addToStream: error:', sys.exc_info())
@@ -144,8 +156,7 @@ def addToStream(x):
 def xlog(*args):
     redisgears.executeCommand('xadd', 'log', '*', 'text', ' '.join(map(str, args)))
 
-
 GearsBuilder('StreamReader').\
     map(predictImage).\
     foreach(addToStream).\
-    register('airsimrunner')
+    register('inspectiondata')

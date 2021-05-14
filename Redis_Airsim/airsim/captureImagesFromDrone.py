@@ -7,8 +7,14 @@ import redis
 import argparse
 from captureImageService import CaptureImageService
 
-conn = redis.Redis(host='localhost', port=6379)
+conn = redis.Redis(host='40.117.227.179', port=6379)
 MAX_IMAGES = 50
+
+def convertToMap(data):
+    if isinstance(data, bytes):  return data.decode('ascii')
+    if isinstance(data, dict):   return dict(map(convertToMap, data.items()))
+    if isinstance(data, tuple):  return map(convertToMap, data)
+    return data
 
 if __name__ == '__main__':
 
@@ -39,11 +45,35 @@ if __name__ == '__main__':
     
     count=1
 
+    try:
+        conn.execute_command('xgroup','CREATE','inspection','InspectionGroup','$','MKSTREAM')
+    except:
+        print("Consumer Group already  exist")
+
+    res = conn.execute_command('xreadgroup','GROUP', 'InspectionGroup','InspectionConsumer','Block', 30000,'STREAMS', 'inspection', '>')
+    currentStream = res[0][1][0]
+    currentStreamMap = convertToMap(currentStream)
+    currentStreamMapList = list(currentStreamMap)
+    streamID = currentStreamMapList[0]
+    inspectionId = currentStreamMapList[1]['test']
+    print("Inspection ID is " + inspectionId )
+    print("Stream ID is " + streamID )
+
+    res = conn.execute_command('xack','inspection','InspectionGroup',streamID)
+    print("Stream Acknowledged " + str(res))
+
     while(client.isApiControlEnabled()):
         iteration = input[:]
-        imagename = str(count) + '.jpg'
+        imagename = inspectionId + "_" + str(count) + '.jpg'
         img_rgb = CaptureImageService.getRealTimeImage(client,count)
         CaptureImageService.addToStream(conn,img_rgb,iteration,imagename,MAX_IMAGES)
         time.sleep(2)
         print(count)
         count += 1
+
+    lastRow = input[:]
+    lastRow.append(['isDone','1'])
+    lastRow.append(['imagename',''])
+    lastRow.append(['image',''])
+    conn.execute_command('xadd', 'inspectiondata',  'MAXLEN', '~', str(MAX_IMAGES), '*', *sum(lastRow,[]))
+    

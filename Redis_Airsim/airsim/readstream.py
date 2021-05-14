@@ -1,6 +1,31 @@
 import redis
-
+import numpy as np
 conn = redis.Redis(host='localhost', port=6379)
-res = conn.execute_command('xread','Block', 10000000,'STREAMS', 'predictions', '$')
 
-print(res)
+# try:
+#     res1 = conn.execute_command('xinfo','GROUPS','inspection')
+# except:
+
+# res1 = conn.execute_command('xgroup','CREATE','inspection','InspectionGroup','$','MKSTREAM')
+# print(res1)
+
+
+# res = conn.execute_command('xreadgroup','GROUP', 'InspectionGroup','A','Block', 30000,'STREAMS', 'inspection', '>')
+
+# print(res)
+
+# def convert(data):
+#     if isinstance(data, bytes):  return data.decode('ascii')
+#     if isinstance(data, dict):   return dict(map(convert, data.items()))
+#     if isinstance(data, tuple):  return map(convert, data)
+#     return data
+
+# tuple1 = res[0][1][0]
+# map1 = convert(tuple1)
+# list1 = list(map1)
+
+# print(list1[0])
+# res = conn.execute_command('xack','inspection','test',list1[0])
+# print(res)
+detectedProbability = np.array([]) 
+print(type(detectedProbability))

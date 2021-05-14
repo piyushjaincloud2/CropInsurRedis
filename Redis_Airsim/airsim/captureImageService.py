@@ -15,7 +15,8 @@ class CaptureImageService:
         storedimg = data.tobytes()
         iteration.append(['imagename',imagename])
         iteration.append(['image',storedimg])
-        conn.execute_command('xadd', 'airsimrunner',  'MAXLEN', '~', str(maxImages), '*', *sum(iteration, []))
+        iteration.append(['isDone','0'])
+        conn.execute_command('xadd', 'inspectiondata',  'MAXLEN', '~', str(maxImages), '*', *sum(iteration, []))
     
     @staticmethod
     def getRealTimeImage(client,count):
