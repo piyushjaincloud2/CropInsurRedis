@@ -14,7 +14,6 @@ import pandas as pd
 
 MAX_IMAGES = 50
 Labels = ["cultivatedLand","inFertileLand","other","highQualityCrop","lowQualityCrop","damageArea"]
-Connection_String = 'DefaultEndpointsProtocol=https;AccountName=droneredissg;AccountKey=hJx8SCf/fYN0zpOJvoAdfLv+JHwDDNO0ZScseOZI4xATYOuU4mI2I4LPbCy/qerO4jrw2zf1AgIC1diDQuayWw==;EndpointSuffix=core.windows.net'
 ContainerName = 'droneimages'
 
 
@@ -47,9 +46,9 @@ def saveImageToAzure(img,blob):
     except:
         xlog('saveImageToAzure: error:', sys.exc_info()[0])
 
-def getBlobUrl(imagename):
+def getBlobUrl(imagename,connectionString):
     try:
-        container_client = ContainerClient.from_connection_string(conn_str=Connection_String, container_name="droneimages")
+        container_client = ContainerClient.from_connection_string(conn_str=connectionString, container_name="droneimages")
         blob_client = container_client.get_blob_client(imagename) 
         return blob_client.url
     except:
@@ -58,10 +57,11 @@ def getBlobUrl(imagename):
 def getSecret(secretName):
     try:
         with open('/run/secrets/'+ secretName) as f:
-            line = f.readline()
-            redisgears.executeCommand('xadd', 'secret', '*', 'text', line)
+            secret = f.readline()
+        redisgears.executeCommand('xadd', 'secret', '*', 'text', secret)
+        return secret
     except:
-        xlog('getSecret: error:', sys.exc_info()[0])
+        xlog('getSecret: error:', sys.exc_info())
 
 def predictImage(x):
         try:
@@ -106,17 +106,17 @@ def predictImage(x):
                 detectedClasses = np.delete(res3, deleteLowProbResult)
                 
                 imagename = x['value']['imagename']
-                getSecret("azure_blob_secret")
-                blob = BlobClient.from_connection_string(conn_str=Connection_String, container_name=ContainerName, blob_name=imagename)
+                connectionString = getSecret("azure_blob_secret")
+                blob = BlobClient.from_connection_string(conn_str=connectionString, container_name=ContainerName, blob_name=imagename)
                 add_boxes_to_images(image,detectedBoxes,detectedClasses,blob)
-                bloburl = getBlobUrl(imagename)
+                bloburl = getBlobUrl(imagename,connectionString)
             
             weatherCondition = x['value']['weather']
             windSpeed = x['value']['windSpeed']
             isDone = x['value']['isDone']
             return detectedProbability,detectedClasses,bloburl,weatherCondition,windSpeed,isDone
         except:
-            xlog('Predict_image: error:', sys.exc_info()[0])
+            xlog('Predict_image: error:', sys.exc_info())
 
 def addToStream(x):
     try:
