@@ -1,0 +1,17 @@
+version: '3'
+services:
+  redis-service:
+    image: redis:latest
+  customer-service:
+    image: sagarandcompany/customer-service:latest
+    depends_on:
+    - redis-service
+    - policy-service
+    ports:
+    - 8080:8080
+  policy-service:
+    image: sagarandcompany/policy-service:latest
+    depends_on:
+    - redis-service
+    ports:
+    - 8081:8081
