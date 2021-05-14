@@ -6,12 +6,12 @@ RUN set -ex; \
     apt-get install -y --no-install-recommends $DEPS;
 
 ENV PYTHONHOME=/var/opt/redislabs/modules/rg/python3_1.0.6/
+ENV FontPath=/data/fonts
 
 RUN set -ex; \
     pip3 install -U pipenv;
 
-
-ADD ./fonts /var/opt/redislabs/modules/rg/python3_1.0.6/fonts
+ADD ./fonts /data/fonts
 
 ADD ./requirements.txt /tmp/requirements.txt
 

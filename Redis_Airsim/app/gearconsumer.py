@@ -6,6 +6,7 @@ import cv2
 import numpy as np
 import redisAI
 import redisgears
+import os
 from azure.storage.blob import BlobClient
 from azure.storage.blob import ContainerClient
 import pandas as pd
@@ -16,6 +17,7 @@ Labels = ["CultivatedLand","InFertileLand","Others"]
 Connection_String = 'DefaultEndpointsProtocol=https;AccountName=droneredissg;AccountKey=hJx8SCf/fYN0zpOJvoAdfLv+JHwDDNO0ZScseOZI4xATYOuU4mI2I4LPbCy/qerO4jrw2zf1AgIC1diDQuayWw==;EndpointSuffix=core.windows.net'
 ContainerName = 'droneimages'
 
+
 def add_boxes_to_images(img, predictions,classes,blob):
     try:
         for idx,pred in enumerate(predictions):
@@ -25,10 +27,11 @@ def add_boxes_to_images(img, predictions,classes,blob):
             width = int(pred[2] * 600)
             height = int(pred[3] * 600)
             shape = [(x, y), (width, height)]
-            
-            font = ImageFont.truetype(r'/var/opt/redislabs/modules/rg/python3_1.0.6/fonts/ariblk.ttf', 20)
-            text = Labels[classes[idx]]
 
+            redisgears.executeCommand('xadd', 'env', '*', 'text', os.environ['FontPath'])
+            font = ImageFont.truetype(r'/data/fonts/ariblk.ttf', 20)
+            text = Labels[classes[idx]]
+            
             ImageDraw.Draw(img).rectangle(shape, outline ="red") 
             ImageDraw.Draw(img).text((x, y), text, fill ="red", align ="left",font=font)
         saveImageToAzure(img,blob)    
@@ -52,6 +55,13 @@ def getBlobUrl(imagename):
     except:
         xlog('getBlobUrl: error:', sys.exc_info()[0])
 
+def getSecret(secretName):
+    try:
+        with open('/run/secrets/'+ secretName) as f:
+            line = f.readline()
+            redisgears.executeCommand('xadd', 'secret', '*', 'text', line)
+    except:
+        xlog('getSecret: error:', sys.exc_info()[0])
 
 def predictImage(x):
         try:
@@ -92,6 +102,7 @@ def predictImage(x):
             detectedClasses = np.delete(res3, deleteLowProbResult)
             
             imagename = x['value']['imagename']
+            getSecret("azure_blob_secret")
             blob = BlobClient.from_connection_string(conn_str=Connection_String, container_name=ContainerName, blob_name=imagename)
             add_boxes_to_images(image,detectedBoxes,detectedClasses,blob)
             bloburl = getBlobUrl(imagename)

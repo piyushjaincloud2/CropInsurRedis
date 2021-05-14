@@ -2,6 +2,8 @@ version: '3'
 services:
   redisedge:
     build: ./redisedge
+    secrets:
+      - azure_blob_secret
     ports:
       - 6379:6379
   droneapp60:
@@ -9,3 +11,6 @@ services:
     depends_on:
       - redisedge
     command: ['init.py', '--url', 'redis://redisedge:6379']
+secrets:
+  azure_blob_secret:
+    file: ./redisedge/secrets/azureblobsecret.txt
