@@ -1,0 +1,23 @@
+{
+    "app_name": "Dronification of Crop-insurance Powered by Drone, AI, Redis and Cloud technologies",  
+    "description": "Enable Crop Insurance company to generate insurance policy and claim settlement using Drone, Redis and Cloud Technologies to ensure transparency, Quick turn around time with 100% accuracy and client satisfaction.", 
+    "hidden": true, 
+    "rank": 23, 
+    "type": "Building Block", 
+    "contributed_by": "Community", 
+    "repo_url": "https://github.com/piyushjaincloud2/CropInsurRedis",
+    "download_url": "https://github.com/piyushjaincloud2/CropInsurRedis/archive/refs/heads/main.zip",
+    "hosted_url": "", 
+    "quick_deploy": "false", 
+    "language": ["JavaScript"], // Backend technologies: "JavaScript", "Java", "Python", "Go", "C#", "Ruby", "PHP", etc. 
+    "redis_commands": ["SETEX"], // Enter all the Redis commands
+    "redis_features": ["caching"],// Enter any core Redis feature or leave it blank.
+    "redis_modules": [], //Value can be one or more of "RediJSON", "RediSearch", "RedisTimeseries", "RedisAI"  "RedisGears" or "RedisGraph" listed in an array. 
+    "app_image_urls": [
+        "https://github.com/redis-developer/basic-caching-demo-nodejs/blob/main/docs/screenshot001.png?raw=true"
+    ], // Provide any image urls in an array.
+    "youtube_url": "", //Provide a Youtube link to your app's video
+    "special_tags": [], // "Hackathon", "Paid", or any event names.
+    "verticals": ["Healthcare", "Financial"], // Can be: "Healthcare", "Financial", "Tourism", "Retail", "Oil & Gas", "Manufacturing", "Technology","Education", "Construction"  
+    "markdown": "https://raw.githubusercontent.com/redislabs-training/redis-sitesearch/master/README.md", // Link to the RAW Markdown.
+}
