@@ -14,3 +14,7 @@ Note:  Need Node Version 14+
 3. Run command `yanr install`
 4. Run Command `yarn start`
 
+## Portal Credentails
+ 
+Username: admin@gmail.com
+Password: admin
