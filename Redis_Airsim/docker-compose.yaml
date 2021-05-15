@@ -6,7 +6,7 @@ services:
       - azure_blob_secret
     ports:
       - 6379:6379
-  droneapp60:
+  droneapp61:
     build: ./app
     depends_on:
       - redisedge

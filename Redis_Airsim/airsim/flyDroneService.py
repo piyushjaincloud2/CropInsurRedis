@@ -36,8 +36,7 @@ class FlyDroneService:
         print("state: %s" % pprint.pformat(state))
 
         airsim.wait_key('Press any key to move vehicle to (-10, 10, -10) at 5 m/s')
-        client.simEnableWeather(True)
-        client.simSetWeatherParameter(airsim.WeatherParameter.Rain, 1)
+        
 
     @staticmethod
     def resetAirSimClient(client):

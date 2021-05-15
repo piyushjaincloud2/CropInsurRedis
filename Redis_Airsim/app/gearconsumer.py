@@ -13,7 +13,8 @@ import pandas as pd
 
 
 MAX_IMAGES = 50
-Labels = ["cultivatedLand","inFertileLand","other","highQualityCrop","lowQualityCrop","damageArea"]
+# Labels = ["cultivatedLand","inFertileLand","other","highQualityCrop","lowQualityCrop","damageArea"]
+Labels = ["cultivatedLand","damageArea","highQualityCrop","inFertileLand","lowQualityCrop","other"]
 ContainerName = 'droneimages'
 
 

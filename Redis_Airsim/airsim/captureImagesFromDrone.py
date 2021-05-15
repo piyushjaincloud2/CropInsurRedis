@@ -6,9 +6,10 @@ import cv2
 import redis
 import argparse
 from captureImageService import CaptureImageService
+import sys
 
-# conn = redis.Redis(host='40.117.227.179', port=6379)
-conn = redis.Redis(host='localhost', port=6379)
+conn = redis.Redis(host='40.117.227.179', port=6379)
+# conn = redis.Redis(host='localhost', port=6379)
 MAX_IMAGES = 50
 
 def convertToMap(data):
@@ -68,7 +69,7 @@ if __name__ == '__main__':
                 print(client.isApiControlEnabled())
 
                 while not client.isApiControlEnabled():
-                    print("Client not taken off yet")
+                    print("Client has not taken off yet")
                     time.sleep(1)
 
                 if client.isApiControlEnabled():
