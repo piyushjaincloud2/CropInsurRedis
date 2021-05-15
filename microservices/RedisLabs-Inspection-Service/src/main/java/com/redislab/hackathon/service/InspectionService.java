@@ -34,8 +34,8 @@ public class InspectionService {
         List<Inspection> inspections = CollectionUtils.isEmpty(property.getInspections()) ? new ArrayList<>() : property.getInspections();
         Map<String, Double> calculateMap = calculateHarvest(property, getAverage(inspection.getFieldDataList()));
         inspection.setPostHarvestIdv(calculateMap.get("postHarvestIdv"));
-        inspection.setPreHarvestPremium(calculateMap.get("preHarvestIdv"));
-        inspection.setPostHarvestIdv(calculateMap.get("preHarvestPremium"));
+        inspection.setPreHarvestIdv(calculateMap.get("preHarvestIdv"));
+        inspection.setPreHarvestPremium(calculateMap.get("preHarvestPremium"));
         inspections.add(inspection);
         property.setInspections(inspections);
         customerRepository.save(customer);

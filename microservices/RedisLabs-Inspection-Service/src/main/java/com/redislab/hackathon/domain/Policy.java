@@ -18,6 +18,9 @@ public class Policy {
     private String inspectionId;
     private String propertyId;
     private String customerId;
+    private Double policySumAssured;
+    private Double policyPremium;
+    private Double claimAmount;
+    private Double claimPremium;
     private Date date = new Date();
-
 }

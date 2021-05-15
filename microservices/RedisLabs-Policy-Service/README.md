@@ -25,6 +25,7 @@ This Service is used to handle all Policy and Claim related requests and created
 ```docker-compose up```
 
 #### API EndsPoints
+
 ```
 Create Policy:- POST http://localhost:8081/policy/save
 Create Claim:- POST http://localhost:8081/policy/claim

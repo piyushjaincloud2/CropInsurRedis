@@ -30,4 +30,4 @@ Create Inspection:- ```POST http://localhost:8082/inspection/save```
 Get Inspection by Inspection Id:- ```GET http://localhost:8082/inspection/get/4cb4bdd9-492d-49f2-8e98-c11f5902015f```
 Get Inspections by Customer Id:- ```GET http://localhost:8082/inspection/findByCustomerId/sasa2d92d-49f2-8e98-c11f5902015f```
 ```
-[Download Postman Collection](https://nodejs.org/)
+[Download Postman Collection](https://github.com/sagarmal624/RedisLabs-Policy-Service/blob/master/Redis%20Lab.postman_collection.json)
