@@ -60,10 +60,12 @@ When the input arrives on the stream the drone flies off and starts capturing im
 
 ## Output
 
-Below is the marking of the images from the output modelled using RedisAI
+Below is the marking of the images from the output modelled using RedisAI.
 
-![Output](/Redis_Airsim/images/cultivated_others.jpg) | ![Output](/Redis_Airsim/images/highquality_lowquality.jpg)
+Cultivated Land with Others category           |  High Quality with Low Quality category
+:------------------------------------:|:-------------------------:
+![Output](/Redis_Airsim/images/cultivated_others.jpg) | ![Output](/Redis_Airsim/images/infertile_land.jpg)
 
-![Output](/Redis_Airsim/images/highquality_lowquality.jpg) | ![Output](/Redis_Airsim/images/other.jpg)
-
-![Output](/Redis_Airsim/images/infertile_land.jpg)
+Infertile Land category           |  Others category
+:------------------------------------:|:-------------------------:
+![Output](/Redis_Airsim/images/infertile_land.jpg) | ![Output](/Redis_Airsim/images/other.jpg)
