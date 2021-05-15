@@ -59,3 +59,12 @@ where customer and insurer can agree and create a new policy.
 - [Dockers](https://www.docker.com/)
 - [Microsoft Airsim](https://microsoft.github.io/AirSim/)
 - [Custom Vision Service](https://azure.microsoft.com/en-us/services/cognitive-services/custom-vision-service/)
+
+## Run Application in Docker Environment
+
+[Docker Compose File](https://github.com/piyushjaincloud2/CropInsurRedis/blob/main/docker-compose.yml)
+
+Command:
+
+``` docker-compose up```
+
