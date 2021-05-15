@@ -38,8 +38,8 @@ Enable Crop Insurance company to generate insurance policy and claim settlement 
  
 - [Next.JS](https://nextjs.org/)
 - [Python](https://www.python.org/)
-- [Java] (https://www.java.com/en/)
-- [Springboot] (https://spring.io/projects/spring-boot)
+- [Java](https://www.java.com/en/)
+- [Springboot](https://spring.io/projects/spring-boot)
    
 **Cloud and Services**  
 
