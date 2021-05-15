@@ -1,7 +1,10 @@
-# test-next
-some practice with next framework, with auth and some other pages, also try to use mongoDb with typegoose
+
+# Front End APP
+Created public app to access by crop Insurer.
 
 ## Steps to run application
+
+Note:  Need Node Version 14+
 
 1. Clone the repo to local repository.
 2. Install yarn global with 
