@@ -1,6 +1,6 @@
 ## Microservices
 
-### Created Three MicroServices
+
  
  #### Customer-Service:  This is used to handle all customer related queries 
  
