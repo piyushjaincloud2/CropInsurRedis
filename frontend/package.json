@@ -1,0 +1,28 @@
+{
+  "name": "droan-app",
+  "version": "1.0.0",
+  "description": "some practice with next framework, with auth and some other pages, also try to use mongoDb with typegoose",
+  "main": "index.js",  
+  "private": true,
+  
+  "scripts": {
+    "build": "yarn workspace @droan-app/webapp run build",
+    "start": "yarn workspace @droan-app/api run start",
+    "dev": "yarn workspace @droan-app/api run dev"
+  },
+  "type": "module",
+  "workspaces": [
+    "api",
+    "webapp"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeshu/test-next.git"
+  },
+  "author": "jeshuBrij",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jeshu/test-next/issues"
+  },
+  "homepage": "https://github.com/jeshu/test-next#readme"
+}
