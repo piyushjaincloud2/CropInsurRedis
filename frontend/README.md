@@ -1,4 +1,3 @@
-
 # Front End APP
 Created public app to access by crop Insurer.
 
@@ -19,3 +18,13 @@ Note:  Need Node Version 14+
 Username: admin@gmail.com
 
 Password: admin
+
+## Application Screenshots
+#### Login page
+![image](https://piyushjaincloud2.github.io/CropInsurRedis/login.png)
+#### Customer Registration page
+![image](https://piyushjaincloud2.github.io/CropInsurRedis/customer-register.png)
+#### Customer List page
+![image](https://piyushjaincloud2.github.io/CropInsurRedis/customer-list.png)
+#### Inspection page
+![image](https://piyushjaincloud2.github.io/CropInsurRedis/inspection-data.png)
