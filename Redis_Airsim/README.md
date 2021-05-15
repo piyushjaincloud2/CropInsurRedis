@@ -60,8 +60,8 @@ When the input arrives on the stream the drone flies off and starts capturing im
 
 ## Output
 
-![Output](/images/cultivated_others.jpg)
+![Output](/Redis_Airsim/images/cultivated_others.jpg)
 
-![Output](/images/highquality_lowquality.jpg)
+![Output](/Redis_Airsim/images/highquality_lowquality.jpg)
 
-![Output](/images/infertile_land.jpg)
+![Output](/Redis_Airsim/images/infertile_land.jpg)
