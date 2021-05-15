@@ -1,0 +1,40 @@
+version: '3'
+services:
+  mysql-service:
+    image: mysql:latest
+    environment:
+    - MYSQL_ROOT_PASSWORD=root
+    - MYSQL_DATABASE=test
+    - MYSQL_PASSWORD=root
+    ports:
+    - 3306:3306
+  redis-service:
+    image: redis:latest
+  customer-service:
+    image: sagarandcompany/customer-service:latest
+    depends_on:
+    - mysql-service
+    - policy-service
+    ports:
+    - 8080:8080
+  policy-service:
+    image: sagarandcompany/policy-service:latest
+    depends_on:
+    - mysql-service
+    ports:
+    - 8081:8081
+  inspection-service:
+    image: sagarandcompany/inspection-service:latest
+    depends_on:
+    - redis-service
+    - mysql-service
+    ports:
+    - 8082:8082
+  droan-webapp:
+    image: jeshu911/droanwebapp:latest
+    depends_on:
+    - customer-service
+    - policy-service
+    - inspection-service
+    ports:
+    - 3000:3000
