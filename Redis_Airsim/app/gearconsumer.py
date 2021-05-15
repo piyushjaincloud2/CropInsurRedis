@@ -13,7 +13,6 @@ import pandas as pd
 
 
 MAX_IMAGES = 50
-# Labels = ["cultivatedLand","inFertileLand","other","highQualityCrop","lowQualityCrop","damageArea"]
 Labels = ["cultivatedLand","damageArea","highQualityCrop","inFertileLand","lowQualityCrop","other"]
 ContainerName = 'droneimages'
 
@@ -28,7 +27,6 @@ def add_boxes_to_images(img, predictions,classes,blob):
             height = int(pred[3] * 600)
             shape = [(x, y), (width, height)]
 
-            redisgears.executeCommand('xadd', 'env', '*', 'text', os.environ['FontPath'])
             font = ImageFont.truetype(r'/data/fonts/ariblk.ttf', 20)
             text = Labels[classes[idx]]
             
@@ -59,7 +57,6 @@ def getSecret(secretName):
     try:
         with open('/run/secrets/'+ secretName) as f:
             secret = f.readline()
-        redisgears.executeCommand('xadd', 'secret', '*', 'text', secret)
         return secret
     except:
         xlog('getSecret: error:', sys.exc_info())
@@ -89,10 +86,6 @@ def predictImage(x):
                 res1 = redisAI.tensorToFlatList(res[0])
                 res2 = redisAI.tensorToFlatList(res[1])
                 res3 = redisAI.tensorToFlatList(res[2])
-
-                redisgears.executeCommand('xadd', 'result1', '*', 'text', res1)
-                redisgears.executeCommand('xadd', 'result2', '*', 'text', res2)
-                redisgears.executeCommand('xadd', 'result3', '*', 'text', res3)
             
                 deleteLowProbResult = []
                 for idx,prediction in enumerate(res2):

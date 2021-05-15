@@ -1,10 +1,16 @@
 import airsim
 import pprint
+import time
 
 class FlyDroneService:
 
     @staticmethod
     def initializeAirSimClient(client):
+
+        while not client.isApiControlEnabled():
+            print("Client is waiting to take off")
+            time.sleep(1)
+
         client.confirmConnection()
         client.enableApiControl(True)
         client.armDisarm(True)
@@ -29,13 +35,11 @@ class FlyDroneService:
         s = pprint.pformat(gps_data)
         print("gps_data: %s" % s)
 
-        airsim.wait_key('Press any key to takeoff')
         client.takeoffAsync().join()
 
         state = client.getMultirotorState()
         print("state: %s" % pprint.pformat(state))
 
-        airsim.wait_key('Press any key to move vehicle to (-10, 10, -10) at 5 m/s')
         
 
     @staticmethod
