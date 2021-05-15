@@ -1,4 +1,3 @@
-
 # Front End APP
 Created public app to access by crop Insurer.
 
@@ -13,6 +12,8 @@ Note:  Need Node Version 14+
 
 3. Run command `yanr install`
 4. Run Command `yarn start`
+5. Now use `http://localhost:3000` in browser to launch the frontend application.
+
 
 ## Portal Credentails
  
