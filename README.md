@@ -15,25 +15,17 @@ Enable Crop Insurance company to generate insurance policy and claim settlement 
 
 ## Technical Data Flow:  
 
-
-- Using a micorsoft custom vision service, we have trained the model which can identify cultivalted, 
-  un-cultivated, high quality crop, low quality crop and other lands, this trained model will provide 
-  a Tensor flow(*.TB) file which will be used by Redis AI to help imgage modelling for drone generated images.  
+```sh
+- Using a micorsoft custom vision service, we have trained the model which can identify cultivalted, un-cultivated, high quality crop, low quality crop and other lands, this trained model will provide a Tensor flow(*.TB) file which will be used by Redis AI to help imgage modelling for drone generated images.  
 - When insurer register a new customer, front end app will call "Savecustomer" API to save data in the MySQL DB.  
-- When insurer click on the inspection button from the front end portal, A signal with new Inspection ID will be
-  push to Redis Stream which inform Drone to start inspection of the land as the information provided by customer.  
-- Drone started inspection, it keep pushing images to Redis stream and redis gears container will process this 
-  images using pre defined/trained transor flow model.  
-- This Modelled  images save to Azure blob storage and all other information will be push to redis stream to front 
-  end app where it showing all data to insurer portal.    
+- When insurer click on the inspection button from the front end portal, A signal with new Inspection ID will be push to Redis Stream which inform Drone to start inspection of the land as the information provided by customer.  
+- Drone started inspection, it keep pushing images to Redis stream and redis gears container will process this images using pre defined/trained transor flow model.  
+- This Modelled  images save to Azure blob storage and all other information will be push to redis stream to front end app where it showing all data to insurer portal.    
 - When Drone stop scanning complete, front end will call "SaveInspection" API to save all data to the MSQL DB.  
-- Also based on this information system will automatically show sumassured and single premimum (single premium 
-  value also added a risk factor based on past claimed data of all other customers in that area) to the portal 
-  where customer and insurer can agree and create a new policy.  
-- Similarly insurer can do multiple inspection of the same property and if required after inspection, insurer
-  can generate a claim for the given policy.      
+- Also based on this information system will automatically show sumassured and single premimum (single premium value also added a risk factor based on past claimed data of all other customers in that area) to the portal where customer and insurer can agree and create a new policy.  
+- Similarly insurer can do multiple inspection of the same property and if required after inspection, insurercan generate a claim for the given policy.      
 - Front end portal will intract with differnt microservices to save and get the data on the portal.   
-
+```
 
 ## High Level Architecture Diagram:  
 
