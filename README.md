@@ -15,7 +15,7 @@ Enable Crop Insurance company to generate insurance policy and claim settlement 
 
 ## Technical Data Flow:  
 
-```sh
+
 - Using a micorsoft custom vision service, we have trained the model which can identify cultivalted, 
   un-cultivated, high quality crop, low quality crop and other lands, this trained model will provide 
   a Tensor flow(*.TB) file which will be used by Redis AI to help imgage modelling for drone generated images.  
@@ -33,7 +33,7 @@ Enable Crop Insurance company to generate insurance policy and claim settlement 
 - Similarly insurer can do multiple inspection of the same property and if required after inspection, insurer
   can generate a claim for the given policy.      
 - Front end portal will intract with differnt microservices to save and get the data on the portal.   
-```
+
 
 ## High Level Architecture Diagram:  
 
