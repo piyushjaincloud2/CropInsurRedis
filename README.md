@@ -2,6 +2,20 @@
 
 Enable Crop Insurance company to generate insurance policy and claim settlement using Drone, Redis and Cloud Technologies to ensure transparency, Quick turn around time with 100% accuracy and client satisfaction.  
 
+## Projects:
+- Redis_Airsim:
+  -  RedisMod for loading Redis modules
+  -  Image modelling using RedisAI
+  -  Stream Registration using RedisGears
+  -  Modules to create virtual farm using Unreal Engine objects
+  -  Azure blob storage integration
+- Frontend:
+  -  Front end app code
+  -  Integration with Redis stream
+  -  Integration with microservice
+- Microservices:
+  -  Microservice code- Java springboot framework
+  
 ## Demo Flow:  
 
 ```sh
@@ -29,7 +43,7 @@ Enable Crop Insurance company to generate insurance policy and claim settlement 
 
 ## High Level Architecture Diagram:  
 
-![image](https://user-images.githubusercontent.com/83917397/118265997-9d99c200-b4d7-11eb-9494-2c3f735b6041.png)
+![image](https://user-images.githubusercontent.com/83917397/118373643-9e188280-b5d5-11eb-8310-51c462572ed1.png)
 
 
 ## Technology Stack
