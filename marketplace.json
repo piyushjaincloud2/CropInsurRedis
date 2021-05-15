@@ -1,5 +1,5 @@
 {
-    "app_name": "Dronification of Crop-insurance Powered by Drone, AI, Redis and Cloud technologies",  
+    "app_name": "Dronification of Crop-insurance Powered by Drone, Redis Modules and Cloud technologies",  
     "description": "Enable Crop Insurance company to generate insurance policy and claim settlement using Drone, Redis and Cloud Technologies to ensure transparency, Quick turn around time with 100% accuracy and client satisfaction.", 
     "hidden": true, 
     "rank": 23, 
@@ -9,15 +9,18 @@
     "download_url": "https://github.com/piyushjaincloud2/CropInsurRedis/archive/refs/heads/main.zip",
     "hosted_url": "", 
     "quick_deploy": "false", 
-    "language": ["JavaScript"], // Backend technologies: "JavaScript", "Java", "Python", "Go", "C#", "Ruby", "PHP", etc. 
-    "redis_commands": ["SETEX"], // Enter all the Redis commands
-    "redis_features": ["caching"],// Enter any core Redis feature or leave it blank.
-    "redis_modules": [], //Value can be one or more of "RediJSON", "RediSearch", "RedisTimeseries", "RedisAI"  "RedisGears" or "RedisGraph" listed in an array. 
+    "language": ["Python", "Java", "Javascript"],  
+    "redis_commands": ["xadd","xack","RG.PYEXECUTE","AI.MODELSET","xgroup","xreadgroup"], 
+    "redis_features": ["Caching", "AI/ML", "pub/sub", "Search"],
+    "redis_modules": ["RediJSON", "RediSearch", "RedisAI", "RedisGears"], 
     "app_image_urls": [
-        "https://github.com/redis-developer/basic-caching-demo-nodejs/blob/main/docs/screenshot001.png?raw=true"
-    ], // Provide any image urls in an array.
-    "youtube_url": "", //Provide a Youtube link to your app's video
-    "special_tags": [], // "Hackathon", "Paid", or any event names.
-    "verticals": ["Healthcare", "Financial"], // Can be: "Healthcare", "Financial", "Tourism", "Retail", "Oil & Gas", "Manufacturing", "Technology","Education", "Construction"  
-    "markdown": "https://raw.githubusercontent.com/redislabs-training/redis-sitesearch/master/README.md", // Link to the RAW Markdown.
+        "https://piyushjaincloud2.github.io/CropInsurRedis/login.png",
+        "https://piyushjaincloud2.github.io/CropInsurRedis/customer-list.png",
+        "https://piyushjaincloud2.github.io/CropInsurRedis/customer-register.png",
+        "https://piyushjaincloud2.github.io/CropInsurRedis/inspection-data.png"
+    ], 
+    "youtube_url": "https://www.youtube.com/watch?v=mEojk4GkwiY",
+    "special_tags": ["Hackathon"],
+    "verticals": ["Insurance"],   
+    "markdown": "https://github.com/piyushjaincloud2/CropInsurRedis/blob/main/README.md", 
 }
