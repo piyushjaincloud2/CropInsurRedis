@@ -1,6 +1,7 @@
 import airsim
 import argparse
 from flyDroneService import FlyDroneService
+import time
 
 if __name__ == '__main__':
 
@@ -14,8 +15,7 @@ if __name__ == '__main__':
 
     gameLevel = args.level
     print(gameLevel)
-    
-    # simulate flying of drone in x,y and z coordinates
+
     if gameLevel == 3:
         print('Level 3')
         client.simEnableWeather(True)

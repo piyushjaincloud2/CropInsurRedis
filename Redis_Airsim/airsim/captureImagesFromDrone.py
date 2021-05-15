@@ -6,10 +6,8 @@ import cv2
 import redis
 import argparse
 from captureImageService import CaptureImageService
-import sys
 
-conn = redis.Redis(host='40.117.227.179', port=6379)
-# conn = redis.Redis(host='localhost', port=6379)
+conn = redis.Redis(host='localhost', port=6379)
 MAX_IMAGES = 50
 
 def convertToMap(data):
@@ -53,7 +51,6 @@ if __name__ == '__main__':
             res = conn.execute_command('xreadgroup','GROUP', 'InspectionGroup','InspectionConsumer','Block', 10000,'STREAMS', 'inspection','>')
             if res:
                 print("Signal received from stream")
-                print(res)
                     
                 count=1
                 currentStream = res[0][1][0]
@@ -65,12 +62,12 @@ if __name__ == '__main__':
                 print("Stream ID is " + streamID )
 
                 CaptureImageService.setCameraPose(client)
-                print("Is Airsim connected :")
-                print(client.isApiControlEnabled())
 
-                while not client.isApiControlEnabled():
-                    print("Client has not taken off yet")
-                    time.sleep(1)
+                client.confirmConnection()
+                client.enableApiControl(True)
+                client.armDisarm(True)
+
+                print("Drone is ready to fly now")
 
                 if client.isApiControlEnabled():
                     res = conn.execute_command('xack','inspection','InspectionGroup',streamID)

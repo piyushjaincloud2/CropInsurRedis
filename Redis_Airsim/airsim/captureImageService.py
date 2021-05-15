@@ -26,5 +26,4 @@ class CaptureImageService:
         simImage = simImages[0]
         img1d = np.fromstring(simImage.image_data_uint8, dtype=np.uint8)
         img_rgb = img1d.reshape(simImage.height, simImage.width, 3)
-        cv2.imwrite(os.path.normpath(filepath + '.jpg'), img_rgb)
         return img_rgb
