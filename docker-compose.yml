@@ -30,6 +30,17 @@ services:
     - mysql-service
     ports:
     - 8082:8082
+  redismod:
+    build: ./Redis_Airsim/redismod
+    secrets:
+      - azure_blob_secret
+    ports:
+      - 6379:6379
+  droneapp:
+    build: ./Redis_Airsim/app
+    depends_on:
+      - redismod
+    command: ['init.py', '--url', 'redis://redismod:6379']
   droan-webapp:
     image: jeshu911/droanwebapp:latest
     depends_on:
@@ -38,3 +49,6 @@ services:
     - inspection-service
     ports:
     - 3000:3000
+secrets:
+  azure_blob_secret:
+    file: ./redisedge/secrets/azureblobsecret.txt
