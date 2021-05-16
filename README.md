@@ -88,7 +88,7 @@ Sometimes you might face an issue in the inspection screen when you are receivin
 - Missing proper validations on the customer validation form, so proper data needs to be entered otherwise it will give 500 error.
 
 
-## Future enhancements
+## Product Future Enhancements
 
 - Provide the feature to search the Customer within the app.
 - Add a risk factor while calculating sum assured and premium based on the past data of a particular location.
