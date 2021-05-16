@@ -88,7 +88,7 @@ python captureImagesFromDrone.py --level=1
 ![Output](/Redis_Airsim/images/terminal2.png)
 Once the data arrives on the stream the drone flies off and starts capturing images which is then processed and analyzed by RedisAI using Tensorflow.
 
-`Note`: Please note after changing the level of the game on the Unreal Editor as mentioned above, please run the above two scripts on a different terminal once again and close the existing ones,
+`Note`: Please note after changing the level of the game on the Unreal Editor as mentioned above, please run the above two scripts on a different terminal once again and close the existing ones.
 ## Output
 
 Below is the marking of the images from the output modelled using RedisAI.
