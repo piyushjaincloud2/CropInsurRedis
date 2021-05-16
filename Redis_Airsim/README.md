@@ -38,7 +38,7 @@ You need to click on the 'Play' button as highlighted below to start the level 1
 
 ![Output](/Redis_Airsim/images/mapsplay.png)
 
-In order to change the levels you can navigate to Content -> Maps folder and double click on the Level 2/Level 3 files as shown below.
+In order to change the levels you can navigate to Content -> Maps folder and double click on the Level 2/Level 3 files as shown below and click on the play button.
 
 ![Output](/Redis_Airsim/images/mapslevels.png)
 
@@ -52,7 +52,7 @@ Install the dependencies
 cd airsim
 pip install -r requirements.txt
 ```
-Then from the root folder of this project run the below docker command to start up the redis and initialize the redis with 'customvision' ai model and register the 'inspectiondata' stream using RedisGears.
+Then from the root folder of this project run the below docker command:
 ```sh
 docker-compose up
 ```
