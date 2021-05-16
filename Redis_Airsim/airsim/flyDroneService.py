@@ -4,6 +4,7 @@ import time
 
 class FlyDroneService:
 
+    # initializes the airsim client and waits for the api control to be enabled, which is done on receiving the signal from the front end app when inspection is started
     @staticmethod
     def initializeAirSimClient(client):
 
@@ -39,9 +40,8 @@ class FlyDroneService:
 
         state = client.getMultirotorState()
         print("state: %s" % pprint.pformat(state))
-
         
-
+    # reset the drone to the initial state
     @staticmethod
     def resetAirSimClient(client):
         client.hoverAsync().join()
@@ -49,6 +49,7 @@ class FlyDroneService:
         client.reset()
         client.enableApiControl(False)
     
+    # set the flying coordinates for the drone at Level 1
     @staticmethod
     def setFlyingCoordsForDroneAtFirstLevel(client):
         client.moveToPositionAsync(0,-85, 0, 10).join()
@@ -64,7 +65,8 @@ class FlyDroneService:
         client.moveToPositionAsync(-80, -9, 0, 10).join()
         client.moveToPositionAsync(-98, -9, 0, 10).join()
         client.moveToPositionAsync(-98, -78, 0, 10).join()
-    
+
+    # set the flying coordinates for the drone at Level 2
     @staticmethod
     def setFlyingCoordsForDroneAtSecondLevel(client):
         client.moveToPositionAsync(0,-102, -2, 8).join()
@@ -81,6 +83,7 @@ class FlyDroneService:
         client.moveToPositionAsync(-98, -5, -2, 8).join()
         client.moveToPositionAsync(-98, -90, -2, 8).join()
     
+    # set the flying coordinates for the drone at Level 3
     @staticmethod
     def setFlyingCoordsForDroneAtThirdLevel(client):
         client.moveToPositionAsync(0,-90, -1, 10).join()

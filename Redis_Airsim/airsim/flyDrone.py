@@ -15,7 +15,7 @@ if __name__ == '__main__':
 
     gameLevel = args.level
     print(gameLevel)
-
+    # set the coordinates to set up the path for drone to travel
     if gameLevel == 3:
         print('Level 3')
         client.simEnableWeather(True)

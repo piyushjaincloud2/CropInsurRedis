@@ -13,10 +13,12 @@ import pandas as pd
 
 
 MAX_IMAGES = 50
+# Categories of different sections in the images
 Labels = ["cultivatedLand","damageArea","highQualityCrop","inFertileLand","lowQualityCrop","other"]
+# container name on the Azure blob storag
 ContainerName = 'droneimages'
 
-
+# add boxes to image to show box corner around the areas categorized by the AI model
 def add_boxes_to_images(img, predictions,classes,blob):
     try:
         for idx,pred in enumerate(predictions):
@@ -36,6 +38,7 @@ def add_boxes_to_images(img, predictions,classes,blob):
     except:
         xlog('add_boxes_to_images: error:', sys.exc_info()[0])
 
+# saving the image to Azure blob storage
 def saveImageToAzure(img,blob):
     try:
         img_byte_arr = io.BytesIO()
@@ -45,6 +48,7 @@ def saveImageToAzure(img,blob):
     except:
         xlog('saveImageToAzure: error:', sys.exc_info()[0])
 
+# get public url of the image stored at Azure
 def getBlobUrl(imagename,connectionString):
     try:
         container_client = ContainerClient.from_connection_string(conn_str=connectionString, container_name="droneimages")
@@ -53,6 +57,7 @@ def getBlobUrl(imagename,connectionString):
     except:
         xlog('getBlobUrl: error:', sys.exc_info()[0])
 
+# get connection string of the Azure blob from the secret file on the container
 def getSecret(secretName):
     try:
         with open('/run/secrets/'+ secretName) as f:
@@ -60,7 +65,8 @@ def getSecret(secretName):
         return secret
     except:
         xlog('getSecret: error:', sys.exc_info())
-
+        
+# get predictions of the different categories in the images from the model trained using Custom Vision at RedisAI 
 def predictImage(x):
         try:
             detectedProbability = np.array([]) 
@@ -112,6 +118,7 @@ def predictImage(x):
         except:
             xlog('Predict_image: error:', sys.exc_info())
 
+# store the modelled results returned by the Redis AI to the Redis Stream
 def addToStream(x):
     try:
         detectedProbabilities =  x[0].tolist()
@@ -145,9 +152,11 @@ def addToStream(x):
     except:
         xlog('addToStream: error:', sys.exc_info())
 
+# store the exception logs in the Redis Log Stream
 def xlog(*args):
     redisgears.executeCommand('xadd', 'log', '*', 'text', ' '.join(map(str, args)))
 
+# Registeration of the stream with the Redis Gears
 GearsBuilder('StreamReader').\
     map(predictImage).\
     foreach(addToStream).\

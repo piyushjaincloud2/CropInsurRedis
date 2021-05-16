@@ -22,6 +22,7 @@ if __name__ == '__main__':
     parser.add_argument('-u', '--level', help='Game Level', type=int, default=1)
     args = parser.parse_args()
 
+    # set the weather conditions for different game levels
     gameLevel = args.level
     print(gameLevel)
     input = []
@@ -38,12 +39,13 @@ if __name__ == '__main__':
        input.append(['weather','Rain'])
        input.append(['windSpeed',5])
 
+    # creating the consumer group if it does not exist to read the data from the stream
     try:
         conn.execute_command('xgroup','CREATE','inspection','InspectionGroup','$','MKSTREAM')
     except:
         print("Consumer Group already  exist")
    
-      
+    # waiting to receive input the redis stream and once the signal is received drone starts flying and stores real time images to Redis Stream in form of bytes.  
     try:
         client = airsim.VehicleClient()
         client.confirmConnection()
