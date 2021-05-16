@@ -72,11 +72,29 @@ Run the below command from the root folder:
 ```sh
 docker-compose up
 ```
-## README.MD for the projects
+## README.MD for the sub projects
 
 - [Redis_Airsim](https://github.com/piyushjaincloud2/CropInsurRedis/blob/main/Redis_Airsim/README.md)
 - [Frontend](https://github.com/piyushjaincloud2/CropInsurRedis/blob/main/frontend/README.md)
 -  [Microservices](https://github.com/piyushjaincloud2/CropInsurRedis/blob/main/microservices/README.md)
+
+## Troubleshooting
+
+Sometimes you might face an issue in the inspection screen when you are receiving images captured by the drone, the page goes in the loading state to continously get the images. In that case, please restart the front end webapp container named `cropinsurredis_droan-webapp_1`.
+
+## Known Issues
+
+- After converting to claim, claim amount is not showing on the front-end app
+- Missing proper validations on the customer validation form, so proper data needs to be entered otherwise it will give 500 error.
+
+
+## Future enhancements
+
+- Provide the feature to search the Customer within the app.
+- Add a risk factor while calculating sum assured and premium based on the past data of a particular location.
+- In the Inspection table, recent inspections coming from the stream should appear on the top.
+- Export the policy data in `PDF` format.
+
 
 ## Application Screenshots
 #### Login page
