@@ -56,7 +56,7 @@ Then from the root folder of this project run the below docker command:
 ```sh
 docker-compose up
 ```
-This will create two container on your machine
+This will create two container located in this project on your machine
 
 - First one would be the redis container on which RedisAI and RedisGears modules are hosted
 - Other one is used to initialze the model on RedisAI and register the stream using RedisGears. It will be in the exit state.
