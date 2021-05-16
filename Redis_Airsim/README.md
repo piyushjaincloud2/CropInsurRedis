@@ -38,7 +38,7 @@ You need to click on the 'Play' button as highlighted below to start the level 1
 
 ![Output](/Redis_Airsim/images/mapsplay.png)
 
-In order to change the levels you can navigate to Content -> Maps folder and double click on the Level 2/Level 3 files as shown below and click on the play button.
+In order to change the level pf the game you can navigate to Content -> Maps folder and double click on the Level 2/Level 3 files as shown below and click on the play button.
 
 ![Output](/Redis_Airsim/images/mapslevels.png)
 
@@ -72,7 +72,7 @@ Copy the connection string from the azure blob storage account and paste it on t
 
 Open your favorite Terminal and run these commands.
 
-On the first Tab run the below command and change the level arguments as 1, 2 and 3 for different levels
+On the first Tab run the below command and change the level arguments as 1, 2 and 3 for starting different levels of the game.
 
 ```sh
 python flyDrone.py --level=1
@@ -88,7 +88,7 @@ python captureImagesFromDrone.py --level=1
 ![Output](/Redis_Airsim/images/terminal2.png)
 Once the data arrives on the stream the drone flies off and starts capturing images which is then processed and analyzed by RedisAI using Tensorflow.
 
-
+`Note`: Please note after changing the level of the game on the Unreal Editor as mentioned above, please run the above two scripts on a different terminal once again and close the existing ones,
 ## Output
 
 Below is the marking of the images from the output modelled using RedisAI.
