@@ -18,6 +18,9 @@ Enable Crop Insurance company to generate insurance policy and claim settlement 
   
 ## Demo Flow:  
 
+![image](https://user-images.githubusercontent.com/83917397/118404229-9f0dea80-b68f-11eb-96c4-06012e286cc2.png)
+
+
 ```sh
 - Insurer logins to the portal using his credentials.  
 - Registers for the new customer with property information.  
@@ -80,7 +83,7 @@ docker-compose up
 
 ## Troubleshooting
 
-Sometimes you might face an issue in the inspection screen when you are receiving images captured by the drone, the page goes in the loading state to continously get the images. In that case, please restart the front end webapp container named `cropinsurredis_droan-webapp_1`.
+Sometimes you might face an issue in the inspection screen when you are receiving images captured by the drone, the page goes in the loading state to continously get the images. In that case, please restart the front end webapp container named `cropinsurredis_droan-webapp_1` and trigger in inspection again.
 
 ## Known Issues
 
