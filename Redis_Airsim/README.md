@@ -64,7 +64,7 @@ Below is the marking of the images from the output modelled using RedisAI.
 
 Cultivated Land with Others category           |  High Quality with Low Quality category
 :------------------------------------:|:-------------------------:
-![Output](/Redis_Airsim/images/cultivated_others.jpg) | ![Output](/Redis_Airsim/images/infertile_land.jpg)
+![Output](/Redis_Airsim/images/cultivated_others.jpg) | ![Output](/Redis_Airsim/images/highquality_lowquality.jpg)
 
 Infertile Land category           |  Others category
 :------------------------------------:|:-------------------------:
