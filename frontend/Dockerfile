@@ -11,3 +11,5 @@ RUN yarn install --force
 CMD [ "yarn", "start" ]
 
 EXPOSE 3000
+
+EXPOSE 3625

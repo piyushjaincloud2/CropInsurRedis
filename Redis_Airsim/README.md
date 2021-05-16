@@ -12,12 +12,39 @@ This project combines several modules of Redis such as RedisGears, Redis Streams
 ## Requirements
 
 - Docker
-- UnReal Engine
+- UnReal Engine(>= 4.24)
 - Python(>=3.6)
 
-## Installation
-
+## Set up Unreal Engine
 It requires [Unreal Engine](https://www.unrealengine.com/en-US/download) to be set up on your local machine to the simulate the flying of drones on the virtual fields.
+
+Hardware requirements to set up Unreeal Engine
+
+- Operating System: Windows 10 64 bit
+- Video Card/DirectX Version: DirectX 11 or DirectX 12 or NVIDIA compatible graphics card
+- RAM: 32 GB
+
+Once the Unreal Engine is set up on your local environment, you need to download the folder from the [Google drive](https://drive.google.com/drive/folders/1gQwwpgchWg-XJDJ987QLkaIBY7J48LoE?usp=sharing). It includes the maps of the landscapes over which the drone needs to fly. We have placed this folder inside Google Drive due to the large size of the folder.
+
+Once the folder is downloaded, you need to double click the 'FinalProjDroneSquad' file as shown below:
+
+![Output](/Redis_Airsim/images/unrealengine.png)
+
+It will launch the landscape on Unreal Editor as shown below:
+
+![Output](/Redis_Airsim/images/maps.png)
+
+You need to click on the 'Play' button as highlighted below to start the level 1.
+
+![Output](/Redis_Airsim/images/mapsplay.png)
+
+In order to change the levels you can navigate to Content -> Maps folder and double click on the Level 2/Level 3 files as shown below.
+
+![Output](/Redis_Airsim/images/mapslevels.png)
+
+Thereafter you can proceed to below installation section to set up other prerequisitives.
+
+## Installation
 
 Install the dependencies
 
@@ -51,12 +78,16 @@ On the first Tab run the below command and change the level arguments as 1, 2 an
 python flyDrone.py --level=1
 ```
 It will initialize the drone and put the drone to waiting to take-off state.
+![Output](/Redis_Airsim/images/terminal1.png)
+
 
 On the second tab run the below command which will continously listen from the inspection Redis Stream on which data is entered from the front end whenever the inspection is trigerred.
 ```sh
 python captureImagesFromDrone.py --level=1
 ```
-When the input arrives on the stream the drone flies off and starts capturing images which is then processed and analyzed by RedisAI using Tensorflow.
+![Output](/Redis_Airsim/images/terminal2.png)
+Once the data arrives on the stream the drone flies off and starts capturing images which is then processed and analyzed by RedisAI using Tensorflow.
+
 
 ## Output
 

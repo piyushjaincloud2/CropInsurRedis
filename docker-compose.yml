@@ -1,4 +1,4 @@
-version: '3'
+version: '3.3'
 services:
   mysql-service:
     image: mysql:latest
@@ -42,13 +42,16 @@ services:
       - redismod
     command: ['init.py', '--url', 'redis://redismod:6379']
   droan-webapp:
-    image: jeshu911/droanwebapp:latest
+    build: ./frontend
     depends_on:
     - customer-service
     - policy-service
     - inspection-service
+    environment:
+      - "REDIS_HOST=redismod"
     ports:
     - 3000:3000
+    - 3625:3625
 secrets:
   azure_blob_secret:
     file: ./Redis_Airsim/redismod/secrets/azureblobsecret.txt
