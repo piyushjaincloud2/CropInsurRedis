@@ -28,7 +28,7 @@ def add_boxes_to_images(img, predictions,classes,blob):
             shape = [(x, y), (width, height)]
 
             font = ImageFont.truetype(r'/data/fonts/ariblk.ttf', 20)
-            text = Labels[classes[idx]]
+            text = Labels[classes[idx]] + "( " + str(detectedProbability[idx]*100) + " )"
             
             ImageDraw.Draw(img).rectangle(shape, outline ="red") 
             ImageDraw.Draw(img).text((x, y), text, fill ="red", align ="left",font=font)

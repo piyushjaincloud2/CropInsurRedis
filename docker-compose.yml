@@ -51,4 +51,4 @@ services:
     - 3000:3000
 secrets:
   azure_blob_secret:
-    file: ./redisedge/secrets/azureblobsecret.txt
+    file: ./Redis_Airsim/redismod/secrets/azureblobsecret.txt
